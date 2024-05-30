@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Dto\Contact;
+use App\Form\ContactType;
 use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +24,11 @@ class DefaultController extends AbstractController
     #[Route('/contact', name: 'app_default_contact')]
     public function contact(): Response
     {
-        return $this->render('contact/index.html.twig', [
-            'controller_name' => 'Contact',
+        $book = new Contact();
+        $form = $this->createForm(ContactType::class, $book);
+
+        return $this->render('default/contact.html.twig', [
+            'form' => $form,
         ]);
     }
 }

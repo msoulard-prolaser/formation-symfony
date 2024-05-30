@@ -20,7 +20,7 @@ class Contact
 
     public function setName(?string $name): void
     {
-        $this->name = $name
+        $this->name = $name;
     }
 
     public function getEmail(): ?string
