@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     #[Route('', name: 'app_book_index')]
-    public function index(): Response
+    public function index(BookRepository $repository): Response
     {
+        $books => $repository->findBy([], ['releaseDate' => 'DESC'], 10);
         return $this->render('book/index.html.twig', [
             'controller_name' => 'BookController::index',
+            'books' => $books,
         ]);
     }
 
@@ -27,11 +30,11 @@ class BookController extends AbstractController
         //priority: 1
         //condition: "request.headers.get('x-custom-header') == 'foo'"
     )]
-    public function show(int $id): Response
+    public function show(BookRepository $repository, int $id): Response
     {
+        $book = $repository->find($id);
         return $this->render('book/show.html.twig', [
             'controller_name' => 'BookController::show - id: '.$id,
-            'id' => $id,
         ]);
     }
     #[Route ('/new', name: 'app_book_new')]
