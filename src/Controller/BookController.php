@@ -2,19 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Book;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+//use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/book')]
 class BookController extends AbstractController
 {
     #[Route('', name: 'app_book_index')]
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
+        return $this->render('book/index.html.twig', [
+            'controller_name' => 'BookController::index',
         ]);
     }
 
@@ -25,12 +27,30 @@ class BookController extends AbstractController
         //priority: 1
         //condition: "request.headers.get('x-custom-header') == 'foo'"
     )]
-    public function show(int $id): JsonResponse
+    public function show(int $id): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
-	        'id' => $id,
+        return $this->render('book/show.html.twig', [
+            'controller_name' => 'BookController::show - id: '.$id,
+            'id' => $id,
         ]);
-    }  
+    }
+    #[Route ('/new', name: 'app_book_new')]
+    public function new(EntityManagerInterface $manager): Response
+    {
+        $book = (new Book())
+            ->setTitle('1984')
+            ->setAuthor('G.Orwell')
+            ->setPlot('Text')
+            ->setReleasedAt(new \DateTimeImmutable('06-01-1951'))
+            ->setIsbn('This book')
+            ;
+
+        $manager->persist($book);
+        $manager->flush();
+
+
+        return $this->render('book/show.html.twig', [
+            'controller_name' => 'BookController::new - id :'. $book->getId(),
+        ]);
+    }
 }

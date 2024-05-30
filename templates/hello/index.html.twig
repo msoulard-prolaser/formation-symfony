@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HelloController!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code>/var/www/src/Controller/HelloController.php</code></li>
+        <li>Your template at <code>/var/www/templates/hello/index.html.twig</code></li>
+        {% for letter in 'A'..'Z' %}
+            <li id="li_letter_{{ loop.index0 }}">{{ loop.index }} : {{ letter }}</li>
+        {% endfor %}
+        {{ dump() }}
+    </ul>
+</div>
+{% endblock %}
