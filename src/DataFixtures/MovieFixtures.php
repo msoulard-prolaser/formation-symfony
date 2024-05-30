@@ -41,7 +41,7 @@ class MovieFixtures extends Fixture
                     ? $genres[$genreName]
                     : $genres[$genreName] = (new Genre())->setName($genreName);
 
-                //$movie->addGenre($genre);
+                $movie->addGenre($genre);
             }
 
             yield $movie;

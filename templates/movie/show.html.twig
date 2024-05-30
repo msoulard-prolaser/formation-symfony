@@ -14,6 +14,7 @@
                 <li class="list-group-item">Price : {{ movie.price }}</li>
                 <li class="list-group-item">Released At : {{ movie.releasedAt|date('d M Y') }}</li>
                 <li class="list-group-item">Plot : {{ movie.plot }}</li>
+                <li class="list-group-item">Genre : {{ movie.genres|map(genre => genre.name)|join(', ') }}</li>
             </ul>
         {% else %}
             <h1>Movie not found.</h1>
