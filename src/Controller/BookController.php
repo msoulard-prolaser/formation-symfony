@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Comment;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +47,16 @@ class BookController extends AbstractController
             ->setPlot('Text')
             ->setReleasedAt(new \DateTimeImmutable('06-01-1951'))
             ->setIsbn('This book')
+            ->setCover('cover')
             ;
+        $comment = (new Comment())
+                ->setName('Awesome')
+                ->setEmail('mem@meme.fr')
+                ->setContent('This book is top')
+                ->setCreatedAt(new \DateTimeImmutable())
+            ;
+
+        $book->addComment($comment);
 
         $manager->persist($book);
         $manager->flush();
@@ -54,6 +64,7 @@ class BookController extends AbstractController
 
         return $this->render('book/show.html.twig', [
             'controller_name' => 'BookController::new - id :'. $book->getId(),
+            'book' => $book,
         ]);
     }
 }
