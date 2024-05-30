@@ -1,16 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Book {{ book.title ?? 'Not found' }}{% endblock %}
 
 {% block body %}
-
     <div class="example-wrapper">
-        <h1>Hello {{ controller_name }}! ✅</h1>
+        {% if book is not empty %}
+            <h1 class="pb-5">{{ book.title }}</h1>
 
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code>/var/www/src/Controller/DefaultController.php</code></li>
-            <li>Your template at <code>/var/www/templates/default/index.html.twig</code></li>
-        </ul>
+            <img class="float-end" src="{{ book.cover }}" alt="{{ book.title }} cover">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Id : {{ book.id }}</li>
+                <li class="list-group-item">author : {{ book.author }}</li>
+                <li class="list-group-item">ISBN : {{ book.isbn }}</li>
+                <li class="list-group-item">Released At : {{ book.releasedAt|date('d M Y') }}</li>
+                <li class="list-group-item">Plot : {{ book.plot }}</li>
+            </ul>
+        {% else %}
+            <h1>Book not found.</h1>
+        {% endif %}
     </div>
 {% endblock %}
