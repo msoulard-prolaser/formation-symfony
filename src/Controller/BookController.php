@@ -16,7 +16,7 @@ class BookController extends AbstractController
     #[Route('', name: 'app_book_index')]
     public function index(BookRepository $repository): Response
     {
-        $books => $repository->findBy([], ['releaseDate' => 'DESC'], 10);
+        $books = $repository->findBy([], ['releaseDate' => 'DESC'], 10);
         return $this->render('book/index.html.twig', [
             'controller_name' => 'BookController::index',
             'books' => $books,

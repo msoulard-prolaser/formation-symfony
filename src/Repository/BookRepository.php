@@ -21,6 +21,16 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
+    public function findByApproxTitle(string $title): iterable
+    {
+        $qb = $this->createQueryBuilder('b');
+
+        return $qb->where($qb->expr()->like('b.title', 'title'))
+            ->setParameter('title', '%$title%')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */

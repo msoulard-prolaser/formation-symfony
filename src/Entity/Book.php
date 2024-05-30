@@ -32,6 +32,9 @@ class Book
     #[ORM\Column(type: Types::TEXT)]
     private ?string $plot = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $cover = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +96,18 @@ class Book
     public function setPlot(string $plot): static
     {
         $this->plot = $plot;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(string $cover): static
+    {
+        $this->cover = $cover;
 
         return $this;
     }
