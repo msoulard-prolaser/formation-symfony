@@ -24,8 +24,8 @@ class DefaultController extends AbstractController
     #[Route('/contact', name: 'app_default_contact')]
     public function contact(): Response
     {
-        $book = new Contact();
-        $form = $this->createForm(ContactType::class, $book);
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
 
         return $this->render('default/contact.html.twig', [
             'form' => $form,
