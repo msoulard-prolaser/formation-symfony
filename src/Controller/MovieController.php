@@ -7,6 +7,7 @@ use App\Form\MovieType;
 use App\Movie\MovieManager;
 use App\Movie\Search\OmdbApiConsumer;
 use App\Movie\Search\SearchTypes;
+use App\Movie\Search\Transformer\OmdbToMovieTransformer;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\RepositoryException;
@@ -70,10 +71,9 @@ class MovieController extends AbstractController
     }
 
     #[Route('/omdb/{title}', name: 'app_movie_omdb', methods: ['GET'])]
-    public function omdb(string $title, OmdbApiConsumer $consumer): Response
+    public function omdb(string $title, OmdbApiConsumer $consumer, OmdbToMovieTransformer $transformer): Response
     {
-        dd($consumer->fetchMovie(SearchTypes::Title, $title));
-        $movie = [];
+        $movie = $transformer->transform($consumer->fetchMovie(SearchTypes::Title, $title));
         return $this->render('movie/show.html.twig', [
            'movie' => $movie,
         ]);

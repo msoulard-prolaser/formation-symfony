@@ -9,9 +9,9 @@ class OmdbToGenreTransformer implements OmdbToTypeTransformerInterface
 {
     public function transform(mixed $value): Genre
     {
-        if(!\isString($value)) {
+        if(!\is_string($value)) {
             throw new \InvalidArgumentException('The value must be a string');
         }
-        return (new Genre())->setName($value));
+        return (new Genre())->setName($value);
     }
 }
