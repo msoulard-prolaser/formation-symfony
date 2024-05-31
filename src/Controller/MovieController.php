@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\Exception\RepositoryException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,19 @@ class MovieController extends AbstractController
         $lastMovies = $repository->findBy([], ['releasedAt' => 'DESC'], 9);
         return $this->render('includes/_last_movies.html.twig', [
             'last_movies' => $lastMovies,
+        ]);
+    }
+
+    #[Route('/new', name: 'app_movie_new')]
+    #[Route('/{id<\d+>}/edit', name: 'app_movie_edit')]
+    public function save(?Movie $movie): Response
+    {
+        $movie ??= new Movie();
+        $form = $this->createForm(MovieType::class, $movie);
+
+        return $this->render('movie/save.html.twig', [
+            'movie' => $movie,
+            'form' => $form,
         ]);
     }
 }
