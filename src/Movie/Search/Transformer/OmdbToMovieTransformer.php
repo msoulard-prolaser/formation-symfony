@@ -19,7 +19,7 @@ class OmdbToMovieTransformer implements OmdbToTypeTransformerInterface
 
     public function transform(mixed $value): Movie
     {
-        if(!\is_array($value) || \count(array_diff(self::KEYS, array_keys($value))) > 0) {
+        if(!\is_array($value) || \count(array_diff(self::KEYS, \array_keys($value))) > 0) {
             throw new \InvalidArgumentException('The value must be an array');
         }
 
