@@ -3,11 +3,13 @@
 namespace App\Dto;
 
 use phpDocumentor\Reflection\PseudoTypes\HtmlEscapedString;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class Contact
 {
     public function __construct(
         private ?string $name = null,
+        #[Assert\Email]
         private ?string $email = null,
         private ?string $subject = null,
         private ?string $message = null,
