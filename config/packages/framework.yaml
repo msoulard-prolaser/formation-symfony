@@ -8,7 +8,7 @@ framework:
     http_client:
         scoped_clients:
             omdb_client:
-                base_url: 'http://www.omdbapi.com'
+                base_uri: 'http://www.omdbapi.com'
                 query:
                     plot: full
                     apikey: '77e9a2a5'
