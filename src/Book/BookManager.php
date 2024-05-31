@@ -11,7 +11,7 @@ class BookManager
 {
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Autowire(param: 'app.books_per_page')]
+        #[Autowire(param: 'app.items_per_page')]
         private readonly int $limit
     ){}
 

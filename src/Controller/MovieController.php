@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Form\MovieType;
+use App\Movie\MovieManager;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\RepositoryException;
@@ -16,10 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class MovieController extends AbstractController
 {
     #[Route('/', name: 'app_movie_index')]
-    public function index(): Response
+    public function index(MovieManager $manager): Response
     {
         return $this->render('movie/index.html.twig', [
             'controller_name' => 'MovieController',
+            'movies' => $manager->getMovieList(),
         ]);
     }
 
@@ -62,6 +64,15 @@ class MovieController extends AbstractController
         return $this->render('movie/save.html.twig', [
             'movie' => $movie,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/omdb/{title}', name: 'app_movie_omdb', methods: ['GET'])]
+    public function omdb(string $title): Response
+    {
+        $movie = [];
+        return $this->render('movie/show.html.twig', [
+           'movie' => $movie,
         ]);
     }
 }
