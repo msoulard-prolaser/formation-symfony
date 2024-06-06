@@ -3,6 +3,7 @@
 namespace App\Movie\Search\Provider;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use App\Movie\Search\OmdbApiConsumer;
 use App\Movie\Search\SearchTypes;
 use App\Movie\Search\Transformer\OmdbToMovieTransformer;
@@ -18,7 +19,7 @@ class MovieProvider implements ProviderInterface
         private readonly EntityManagerInterface $manager,
         private readonly OmdbToMovieTransformer $transformer,
         private readonly GenreProvider $genreProvider,
-        //private readonly Security $security,
+        private readonly Security $security,
     ){}
     public function getOne(string $value, SearchTypes $type = SearchTypes::Title): Movie
     {
@@ -39,6 +40,10 @@ class MovieProvider implements ProviderInterface
         foreach ($this->genreProvider->getFromOmdbString($data['Genre']) as $genre) {
             $movie->addGenre($genre);
         }
+
+//        if($user = $this->security->getUser() instanceof User){
+//            $movie->setCreatedBy($user);
+//        }
 
 
 
