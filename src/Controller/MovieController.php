@@ -9,6 +9,7 @@ use App\Movie\Search\Provider\MovieProvider;
 use App\Movie\Search\SearchTypes;
 use App\Repository\MovieRepository;
 use App\Security\Voter\MovieEditVoter;
+use App\Security\Voter\MovieVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +32,7 @@ class MovieController extends AbstractController
     public function show(?Movie $movie): Response
     {
         if($movie) {
-            $this->denyAccessUnlessGranted(MovieEditVoter::EDIT, $movie);
+            $this->denyAccessUnlessGranted(MovieVoter::VIEW, $movie);
         }
 
         return $this->render('movie/show.html.twig', [
@@ -52,7 +53,7 @@ class MovieController extends AbstractController
     public function save(?Movie $movie, Request $request, EntityManagerInterface $manager): Response
     {
         if($movie) {
-            $this->denyAccessUnlessGranted('movie.show', $movie);
+            $this->denyAccessUnlessGranted(MovieVoter::EDIT, $movie);
         }
         $movie ??= new Movie();
         $form = $this->createForm(MovieType::class, $movie);
@@ -80,7 +81,7 @@ class MovieController extends AbstractController
     public function omdb(?Movie $movie, string $title, MovieProvider $provider): Response
     {
         if($movie) {
-           $this->denyAccessUnlessGranted('movie.show', $movie);
+           $this->denyAccessUnlessGranted(MovieVoter::VIEW, $movie);
         }
 
         return $this->render('movie/show.html.twig', [
