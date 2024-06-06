@@ -46,6 +46,9 @@ class MovieController extends AbstractController
     #[Route('/{id<\d+>}/edit', name: 'app_movie_edit')]
     public function save(?Movie $movie, Request $request, EntityManagerInterface $manager): Response
     {
+//        if($movie) {
+//            $this->denyAccessUnlessGranted('movie.edit', $movie);
+//        }
         $movie ??= new Movie();
         $form = $this->createForm(MovieType::class, $movie);
 

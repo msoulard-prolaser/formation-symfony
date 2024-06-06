@@ -7,6 +7,7 @@ use App\Entity\Book;
 use App\Entity\Comment;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use App\Security\Voter\BookEditVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,9 +43,13 @@ class BookController extends AbstractController
         ]);
     }
     #[Route ('/new', name: 'app_book_new')]
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    #[Route('/{id}/edit', name: 'app_book_edit')]
+    public function save(?Book $book, Request $request, EntityManagerInterface $manager): Response
     {
-        $book = new Book();
+        if($book) {
+           $this->denyAccessUnlessGranted(BookEditVoter::EDIT, $book);
+        }
+        $book ??= new Book();
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
