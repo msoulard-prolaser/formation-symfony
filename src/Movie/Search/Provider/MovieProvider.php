@@ -41,9 +41,9 @@ class MovieProvider implements ProviderInterface
             $movie->addGenre($genre);
         }
 
-//        if($user = $this->security->getUser() instanceof User){
-//            $movie->setCreatedBy($user);
-//        }
+        if($user = $this->security->getUser() instanceof User){
+            $movie->setCreatedBy($user);
+        }
 
 
 
