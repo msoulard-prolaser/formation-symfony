@@ -26,5 +26,6 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'app_security_logout')]
     public function logout()
     {
+        throw new \RuntimeException();
     }
 }
