@@ -5,14 +5,23 @@ namespace App\Security\Voter;
 use App\Entity\Book;
 use App\Entity\Movie;
 use App\Entity\User;
+use App\Movie\Event\MovieRenderageEvent;
+use App\Repository\MovieRepository;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MovieVoter extends Voter
 {
 
     public const EDIT = 'movie.edit';
     public const VIEW = 'movie.view';
+
+    public function __construct(
+        private readonly EventDispatcherInterface $dispatcher,
+    ){}
+
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -30,16 +39,14 @@ class MovieVoter extends Voter
         }
 
 
-        return match ($attribute) {
+        $vote =  match ($attribute) {
             self::EDIT => $this->checkEdit($subject, $user),
             self::VIEW => $this->checkView($subject, $user),
             default => false,
         };
-//        $age = $user->getBirthday()?->diff(new \DateTimeImmutable())->y ?? null;
-//        $arrayRated = explode('-', $subject->getRated());
-//        if(count($arrayRated) > 1){
-//            return (int)$arrayRated[1] <= (int)$age;
-//        }
+
+        return $vote;
+
     }
     public function checkView(Movie $movie, User $user): bool
     {
@@ -48,11 +55,17 @@ class MovieVoter extends Voter
         }
 
         $age = $user->getBirthday()?->diff(new \DateTimeImmutable())->y ?? null;
-        return match ($movie->getRated()) {
+        $vote =  match ($movie->getRated()) {
             'PG', 'PG-13' => $age && $age >= 13,
             'R', 'NC-17' => $age && $age >= 17,
             default => false,
         };
+
+        if(!$vote){
+            $this->dispatcher->dispatch(new MovieRenderageEvent($movie, $user));
+        }
+
+        return $vote;
     }
 
     public function checkEdit(Movie $movie, User $user): bool
