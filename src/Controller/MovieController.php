@@ -8,7 +8,6 @@ use App\Movie\MovieManager;
 use App\Movie\Search\Provider\MovieProvider;
 use App\Movie\Search\SearchTypes;
 use App\Repository\MovieRepository;
-use App\Security\Voter\MovieEditVoter;
 use App\Security\Voter\MovieVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
