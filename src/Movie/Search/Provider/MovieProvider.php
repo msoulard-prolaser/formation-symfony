@@ -4,6 +4,7 @@ namespace App\Movie\Search\Provider;
 
 use App\Entity\Movie;
 use App\Entity\User;
+use App\Movie\Event\MovieImportEvent;
 use App\Movie\Search\OmdbApiConsumer;
 use App\Movie\Search\SearchTypes;
 use App\Movie\Search\Transformer\OmdbToMovieTransformer;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MovieProvider implements ProviderInterface
 {
@@ -21,6 +23,7 @@ class MovieProvider implements ProviderInterface
         private readonly OmdbToMovieTransformer $transformer,
         private readonly GenreProvider $genreProvider,
         private readonly Security $security,
+        private readonly EventDispatcherInterface $dispatcher,
     ){}
     public function getOne(string $value, SearchTypes $type = SearchTypes::Title): Movie
     {
@@ -28,7 +31,7 @@ class MovieProvider implements ProviderInterface
         $data = $this->consumer->fetchMovie($type, $value);
 
         if ($movie = $this->manager->getRepository(Movie::class)->findOneBy(['title' => $data['Title']])) {
-            //$this->io?->note('Movie already in database!');
+            $this->io?->note('Movie already in database!');
 
             return $movie;
         }
@@ -52,7 +55,7 @@ class MovieProvider implements ProviderInterface
         $this->manager->persist($movie);
         $this->manager->flush();
 
-//        $this->dispatcher->dispatch(new MovieImportEvent($movie));
+        $this->dispatcher->dispatch(new MovieImportEvent($movie));
 
         return $movie;
     }
