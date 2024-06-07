@@ -6,7 +6,6 @@ use App\Movie\Event\MovieImportEvent;
 use App\Movie\Event\MovieRenderageEvent;
 use App\Movie\Notifications\MovieNotifier;
 use App\Repository\UserRepository;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MovieSubscriber implements EventSubscriberInterface
@@ -24,7 +23,6 @@ class MovieSubscriber implements EventSubscriberInterface
 
     public function onMovieRenderageEvent(MovieRenderageEvent $event): void
     {
-
     }
 
     public static function getSubscribedEvents(): array

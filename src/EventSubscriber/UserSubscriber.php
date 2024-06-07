@@ -20,7 +20,7 @@ class UserSubscriber implements EventSubscriberInterface
         $user = $event->getAuthenticationToken()->getUser();
         if($user instanceof User){
             $user->setLastConnectedAt(new \DateTimeImmutable());
-            
+
             $this->manager->persist($user);
             $this->manager->flush();
         }
