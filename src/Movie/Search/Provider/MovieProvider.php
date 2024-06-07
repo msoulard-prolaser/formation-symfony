@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MovieProvider implements ProviderInterface
 {
+    private ?SymfonyStyle $io = null;
     public function __construct(
         private readonly OmdbApiConsumer $consumer,
         private readonly EntityManagerInterface $manager,
@@ -23,7 +24,7 @@ class MovieProvider implements ProviderInterface
     ){}
     public function getOne(string $value, SearchTypes $type = SearchTypes::Title): Movie
     {
-        //$this->io?->text('Fetching data from OMDbApi...');
+        $this->io?->text('Fetching data from OMDbApi...');
         $data = $this->consumer->fetchMovie($type, $value);
 
         if ($movie = $this->manager->getRepository(Movie::class)->findOneBy(['title' => $data['Title']])) {
@@ -34,7 +35,7 @@ class MovieProvider implements ProviderInterface
 
         //$this->security->isGranted('ROLE_ADMIN');
 
-        //$this->io?->text('Creating Movie object...');
+        $this->io?->text('Creating Movie object...');
         $movie = $this->transformer->transform($data);
 
         foreach ($this->genreProvider->getFromOmdbString($data['Genre']) as $genre) {
@@ -47,7 +48,7 @@ class MovieProvider implements ProviderInterface
 
 
 
-        //$this->io?->note('Saving movie in database.');
+        $this->io?->note('Saving movie in database.');
         $this->manager->persist($movie);
         $this->manager->flush();
 
