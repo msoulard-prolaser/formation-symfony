@@ -61,7 +61,7 @@ class MovieVoter extends Voter
             default => false,
         };
 
-        if(!$vote){
+        if(false === $vote){
             $this->dispatcher->dispatch(new MovieRenderageEvent($movie, $user));
         }
 

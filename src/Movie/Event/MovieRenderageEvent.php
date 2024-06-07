@@ -3,7 +3,7 @@
 namespace App\Movie\Event;
 
 use App\Entity\Movie;
-use App\Movie\Event\MovieEvent;
+use App\Entity\User;
 
 class MovieRenderageEvent extends MovieEvent
 {
